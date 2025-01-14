@@ -1,7 +1,23 @@
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Star, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useProducts } from "../hooks/useProducts";
 
 const Home: React.FC = () => {
+  const { categories, products, isLoading } = useProducts();
+
+  const getFeaturedProducts = () => {
+    return products
+      .filter((product) => Number(product.rating) >= 4.4)
+      .slice(0, 5);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-96">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
   return (
     <div className="space-y-12">
       <div className="relative bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl overflow-hidden">
@@ -24,12 +40,69 @@ const Home: React.FC = () => {
         </div>
       </div>
 
-        <div className="text-center">
-            <h2 className="text-2xl md:text-4xl font-bold">Popular Categories</h2>
-            <p className="text-gray-500">
-            Discover the best products from our top categories.
-            </p>
+      <section>
+        <h2 className="text-3xl font-bold mb-8">Shop by Category</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {categories.map((category) => (
+            <Link
+              key={category}
+              to={`/products?category=${category}`}
+              className="group relative overflow-hidden rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow"
+            >
+              <div className="aspect-square p-6 flex flex-col items-center justify-center text-center">
+                <div className="mb-4 p-4 bg-indigo-100 rounded-full group-hover:bg-indigo-200 transition-colors">
+                  <ShoppingBag className="h-8 w-8 text-indigo-600" />
+                </div>
+                <h3 className="text-lg font-semibold capitalize">{category}</h3>
+              </div>
+            </Link>
+          ))}
         </div>
+      </section>
+
+      <section>
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-3xl font-bold">Featured Products</h2>
+          <Link
+            to="/products"
+            className="text-indigo-600 hover:text-indigo-700 font-semibold flex items-center"
+          >
+            View All
+            <TrendingUp className="ml-2 h-5 w-5" />
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          {getFeaturedProducts().map((product) => (
+            <Link
+              key={product.id}
+              to={`/products/${product.id}`}
+              className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden"
+            >
+              <div className="aspect-square relative">
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="absolute inset-0 w-full h-full object-contain p-4"
+                />
+              </div>
+              <div className="p-4">
+                <h3 className="font-semibold text-lg mb-2 line-clamp-1">
+                  {product.title}
+                </h3>
+                <div className="flex items-center justify-between">
+                  <span className="text-xl font-bold text-indigo-600">
+                    ₹{product.price}
+                  </span>
+                  <div className="flex items-center text-yellow-400">
+                    <Star className="h-5 w-5 fill-current" />
+                    <span className="ml-1 text-gray-600">{product.rating}</span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
     </div>
   );
 };
