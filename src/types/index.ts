@@ -31,3 +31,15 @@ export interface AuthState {
   isLoading: boolean;
   error: string | null;
 }
+
+export interface Address {
+  id: string;
+  fullName: string;
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  zipCode: string;
+  phone: string;
+  isDefault: boolean;
+}
