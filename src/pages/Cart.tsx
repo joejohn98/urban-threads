@@ -23,12 +23,12 @@ const Cart = () => {
   const handleQuantityChange = (id: string, newQuantity: number) => {
     if (newQuantity > 0 && newQuantity <= 10) {
       dispatch(updateQuantity({ id, quantity: newQuantity }));
+      toast.success("Quantity updated");
     }
     if (newQuantity === 0) {
       dispatch(removeFromCart(id));
     }
-    toast.success("Quantity updated");
-    if(newQuantity > 10) {
+    if (newQuantity === 10) {
       toast.error("Maximum quantity is 10");
     }
   };
@@ -111,7 +111,11 @@ const Cart = () => {
                     }
                     className="p-1 rounded-md hover:bg-gray-100"
                   >
-                    <Plus className="h-4 w-4" />
+                    {item.quantity < 10 ? (
+                      <Plus className="h-4 w-4" />
+                    ) : (
+                      <span className="text-gray-400">Max</span>
+                    )}
                   </button>
                 </div>
                 <div className="flex space-x-2">
