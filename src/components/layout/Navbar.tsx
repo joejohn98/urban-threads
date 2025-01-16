@@ -11,6 +11,8 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   const { user } = useSelector((state: RootState) => state.auth);
+  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,9 +49,19 @@ const Navbar = () => {
                 <>
                   <Link to="/cart" className="relative">
                     <ShoppingCart className="h-6 w-6 text-gray-600 hover:text-indigo-600" />
+                    {cartItems.length > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {cartItems.length}
+                      </span>
+                    )}
                   </Link>
                   <Link to="/wishlist" className="relative">
                     <Heart className="h-6 w-6 text-gray-600 hover:text-indigo-600" />
+                    {wishlistItems.length > 0 && (
+                      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                        {wishlistItems.length}
+                      </span>
+                    )}
                   </Link>
                   <button
                     onClick={handleLogout}
@@ -99,14 +111,14 @@ const Navbar = () => {
                     className="flex items-center space-x-2 text-gray-600 hover:text-indigo-600"
                   >
                     <ShoppingCart className="h-6 w-6" />
-                    <span>Cart ()</span>
+                    <span>Cart ({cartItems.length})</span>
                   </Link>
                   <Link
                     to="/wishlist"
                     className="flex items-center space-x-2 text-gray-600 hover:text-indigo-600"
                   >
                     <Heart className="h-6 w-6" />
-                    <span>Wishlist ()</span>
+                    <span>Wishlist ({wishlistItems.length})</span>
                   </Link>
                   <button
                     onClick={handleLogout}
