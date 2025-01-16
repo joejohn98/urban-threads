@@ -28,6 +28,9 @@ const Cart = () => {
       dispatch(removeFromCart(id));
     }
     toast.success("Quantity updated");
+    if(newQuantity > 10) {
+      toast.error("Maximum quantity is 10");
+    }
   };
 
   const handleRemove = (id: string) => {
