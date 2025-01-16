@@ -13,6 +13,8 @@ import SignUp from "./pages/SignUp";
 import { Toaster } from "react-hot-toast";
 import Cart from "./pages/Cart";
 import Wishlist from "./pages/Wishlist";
+import Checkout from "./pages/Checkout";
+import OrderConfirmation from "./pages/OrderConfirmation";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
               <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/checkout" element={<Checkout/>} />
+              <Route path="/order-confirmation" element={<OrderConfirmation />} />
               <Route path="*" element={<NotFound />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
