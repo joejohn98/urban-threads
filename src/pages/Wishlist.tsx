@@ -7,7 +7,7 @@ import { addToCart } from "../store/slices/cartSlice";
 import toast from "react-hot-toast";
 import { Product } from "../types";
 
-const Wishlist:React.FC = () => {
+const Wishlist: React.FC = () => {
   const dispatch = useDispatch();
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
 
@@ -24,7 +24,7 @@ const Wishlist:React.FC = () => {
 
   if (wishlistItems.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] bg-gray-50 rounded-lg shadow-sm">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] rounded-lg ">
         <Heart className="h-24 w-24 text-gray-300 mb-6" />
         <h2 className="text-3xl font-bold text-gray-900 mb-4">
           Your wishlist is empty
@@ -92,6 +92,6 @@ const Wishlist:React.FC = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Wishlist;
