@@ -32,7 +32,7 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (!user) {
-      navigate("/");
+      navigate("/login");
       toast.error("Please login to add to cart!");
       return;
     } else {
@@ -46,7 +46,7 @@ const ProductDetail = () => {
 
   const handleWishlist = () => {
     if (!user) {
-      navigate("/");
+      navigate("/login");
       toast.error("Please login to add to wishlist!");
     } else {
       if (product) {
