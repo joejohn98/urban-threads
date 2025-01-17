@@ -29,11 +29,10 @@ const ProductList = () => {
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
-  const [priceFilter, setPriceFilter] = useState<number>(0);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1810]);
 
-  const { products, filters, categories, setFilters, isLoading } =
+  const { products, filters, categories, setFilters, isLoading, pagination } =
     useProducts();
-  console.log(products);
 
   useEffect(() => {
     const category = searchParams.get("category");
@@ -54,11 +53,11 @@ const ProductList = () => {
     }));
   };
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPriceFilter(Number(e.target.value));
-
+    const value = Number(e.target.value);
+    setPriceRange([0, value]);
     setFilters((prevFilters) => ({
       ...prevFilters,
-      filterByPriceRange: [0, Number(e.target.value)],
+      filterByPriceRange: [0, value],
     }));
   };
 
@@ -84,11 +83,12 @@ const ProductList = () => {
       filterByPriceSort: "",
       filterBySize: [],
     });
+    setPriceRange([0, 1810]);
   };
 
   const handleAddToCart = (product: Product) => {
     if (!user) {
-      navigate("/");
+      navigate("/login");
       toast.error("Please login to add to cart!");
       return;
     } else {
@@ -186,19 +186,19 @@ const ProductList = () => {
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold mb-4">Price</h3>
+        <h3 className="text-lg font-semibold mb-4">Price Range</h3>
         <input
           type="range"
           min={0}
           max={1810}
-          step={1}
-          value={priceFilter}
+          step={10}
+          value={priceRange[1]}
           onChange={handlePriceChange}
           className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
         />
         <div className="flex justify-between text-sm text-gray-600 mt-2">
-          <span>₹{filters.filterByPriceRange[0]}</span>
-          <span>₹{filters.filterByPriceRange[1]}</span>
+          <span>₹{priceRange[0]}</span>
+          <span>₹{priceRange[1]}</span>
         </div>
       </div>
 
@@ -246,11 +246,13 @@ const ProductList = () => {
 
         {/* Product Grid */}
         <div className="lg:col-span-3">
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
             {products.map((product) => (
               <div
                 key={`product-${product.id}`}
-                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col"
+                className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col ${
+                  !product.in_stock ? "opacity-50 pointer-events-none" : ""
+                }`}
               >
                 <div className="relative pt-[100%]">
                   <Link to={`/products/${product.id}`}>
@@ -330,6 +332,52 @@ const ProductList = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="mt-8 flex justify-center items-center space-x-4">
+            <button
+              onClick={pagination.previousPage}
+              disabled={pagination.currentPage === 1}
+              className={`px-4 py-2 rounded-lg ${
+                pagination.currentPage === 1
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-indigo-600 text-white hover:bg-indigo-700"
+              } transition-colors duration-300`}
+            >
+              Previous
+            </button>
+
+            <div className="flex items-center space-x-2">
+              {Array.from(
+                { length: pagination.totalPages },
+                (_, i) => i + 1
+              ).map((pageNumber) => (
+                <button
+                  key={pageNumber}
+                  onClick={() => pagination.goToPage(pageNumber)}
+                  className={`w-8 h-8 rounded-lg ${
+                    pageNumber === pagination.currentPage
+                      ? "bg-indigo-600 text-white"
+                      : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                  } transition-colors duration-300`}
+                >
+                  {pageNumber}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={pagination.nextPage}
+              disabled={pagination.currentPage === pagination.totalPages}
+              className={`px-4 py-2 rounded-lg ${
+                pagination.currentPage === pagination.totalPages
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-indigo-600 text-white hover:bg-indigo-700"
+              } transition-colors duration-300`}
+            >
+              Next
+            </button>
           </div>
         </div>
       </div>
