@@ -37,11 +37,6 @@ const Checkout = () => {
     null
   );
 
-  if (items.length === 0) {
-    navigate("/cart");
-    return null;
-  }
-
   const handleAddressSubmit = (address: Address) => {
     setShippingAddress(address);
     setStep(2);
