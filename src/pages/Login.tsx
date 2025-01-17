@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Eye, EyeOff, User } from "lucide-react";
 import { setUser } from "../store/slices/authSlice";
@@ -8,11 +8,13 @@ import toast from "react-hot-toast";
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+  const from = location.state?.from?.pathname || "/";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -26,6 +28,16 @@ const Login = () => {
       email: "guest@example.com",
       password: "guest123",
     });
+    dispatch(
+      setUser({
+        id: "1",
+        email: "guest@example.com",
+        firstName: "Guest",
+        lastName: "User",
+      })
+    );
+    toast.success("Logged in successfully");
+    navigate(from, { replace: true });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -40,7 +52,7 @@ const Login = () => {
       })
     );
     toast.success("Logged in successfully");
-    navigate("/");
+    navigate(from, { replace: true });
   };
 
   return (

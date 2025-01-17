@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Heart, Minus, Plus, ShoppingCart, Star } from "lucide-react";
 import { AppDispatch, RootState } from "../store";
@@ -16,6 +16,7 @@ const ProductDetail = () => {
   const { id } = useParams();
   const { allProducts, isLoading } = useProducts();
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
 
   const { user } = useSelector((state: RootState) => state.auth);
@@ -32,7 +33,7 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     if (!user) {
-      navigate("/login");
+      navigate("/login", { state: { from: { pathname: location.pathname } } });
       toast.error("Please login to add to cart!");
       return;
     } else {
@@ -46,7 +47,7 @@ const ProductDetail = () => {
 
   const handleWishlist = () => {
     if (!user) {
-      navigate("/login");
+      navigate("/login", { state: { from: { pathname: location.pathname } } });
       toast.error("Please login to add to wishlist!");
     } else {
       if (product) {
