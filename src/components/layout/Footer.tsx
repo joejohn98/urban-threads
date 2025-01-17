@@ -114,7 +114,7 @@ const Footer: React.FC = () => {
               </div>
               <div className="flex items-center space-x-3 text-gray-600">
                 <Mail size={18} />
-                <span>support@shopmart.com</span>
+                <span>support@urbanthreads.com</span>
               </div>
             </div>
           </div>
