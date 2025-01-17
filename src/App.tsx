@@ -16,6 +16,7 @@ import Wishlist from "./pages/Wishlist";
 import Checkout from "./pages/Checkout";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import PrivateRoute from "./components/auth/PrivateRoute";
+import Footer from "./components/layout/Footer";
 
 function App() {
   return (
@@ -65,6 +66,7 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
           </main>
+          <Footer />
         </div>
         <Toaster position="top-right" />
       </Router>

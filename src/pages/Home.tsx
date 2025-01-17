@@ -26,7 +26,7 @@ const Home = () => {
         <div className="absolute inset-0 opacity-20 bg-pattern"></div>
         <div className="relative px-8 py-16 md:py-24 text-white">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            Welcome to ShopHub
+            Welcome to Urban Threads
           </h1>
           <p className="text-xl md:text-2xl mb-8 max-w-2xl">
             Discover amazing products at unbeatable prices. Shop now and enjoy
