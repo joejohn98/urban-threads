@@ -1,12 +1,13 @@
-import { ShoppingBag, Star, TrendingUp } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ShoppingBag, Star, TrendingUp } from "lucide-react";
+
 import { useProducts } from "../hooks/useProducts";
 
-const Home: React.FC = () => {
-  const { categories, products, isLoading } = useProducts();
+const Home = () => {
+  const { allProducts, isLoading, categories } = useProducts();
 
   const getFeaturedProducts = () => {
-    return products
+    return allProducts
       .filter((product) => Number(product.rating) >= 4.4)
       .slice(0, 5);
   };
@@ -20,11 +21,12 @@ const Home: React.FC = () => {
   }
   return (
     <div className="space-y-12">
+      {/* Hero Section */}
       <div className="relative bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl overflow-hidden">
         <div className="absolute inset-0 opacity-20 bg-pattern"></div>
         <div className="relative px-8 py-16 md:py-24 text-white">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            Welcome to Urban Threads
+            Welcome to ShopHub
           </h1>
           <p className="text-xl md:text-2xl mb-8 max-w-2xl">
             Discover amazing products at unbeatable prices. Shop now and enjoy
@@ -39,7 +41,7 @@ const Home: React.FC = () => {
           </Link>
         </div>
       </div>
-
+      {/* Categories Section */}
       <section>
         <h2 className="text-3xl font-bold mb-8">Shop by Category</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -59,7 +61,7 @@ const Home: React.FC = () => {
           ))}
         </div>
       </section>
-
+      {/* Featured Products Section */}
       <section>
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl font-bold">Featured Products</h2>
@@ -71,7 +73,7 @@ const Home: React.FC = () => {
             <TrendingUp className="ml-2 h-5 w-5" />
           </Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {getFeaturedProducts().map((product) => (
             <Link
               key={product.id}

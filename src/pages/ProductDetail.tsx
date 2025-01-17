@@ -14,7 +14,7 @@ import { useProducts } from "../hooks/useProducts";
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const { products, isLoading } = useProducts();
+  const { allProducts, isLoading } = useProducts();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -23,7 +23,7 @@ const ProductDetail = () => {
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
   const [quantity, setQuantity] = useState(1);
 
-  const product = products.find((item) => item.id === id);
+  const product = allProducts.find((item) => item.id === id);
   const isInWishlist = wishlistItems.some((item) => item.id === id);
 
   const handleQuantityChange = (value: number) => {
