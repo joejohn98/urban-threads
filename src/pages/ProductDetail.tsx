@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Heart, Minus, Plus, ShoppingCart, Star } from "lucide-react";
 import { AppDispatch, RootState } from "../store";
-import { addToCart } from "../store/slices/cartSlice";
+import { addToCart, updateQuantity } from "../store/slices/cartSlice";
 import {
   addToWishlist,
   removeFromWishlist,
@@ -20,15 +20,23 @@ const ProductDetail = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { user } = useSelector((state: RootState) => state.auth);
+  const { items } = useSelector((state: RootState) => state.cart);
 
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
   const [quantity, setQuantity] = useState(1);
 
   const product = allProducts.find((item) => item.id === id);
+
   const isInWishlist = wishlistItems.some((item) => item.id === id);
+  const cartItem = items.find((item) => item.id === id);
+  const isInCart = Boolean(cartItem);
 
   const handleQuantityChange = (value: number) => {
-    setQuantity(Math.max(1, Math.min(10, value)));
+    const newQuantity = Math.max(1, Math.min(10, value));
+    setQuantity(newQuantity);
+    if (isInCart && id) {
+      dispatch(updateQuantity({ id, quantity: newQuantity }));
+    }
   };
 
   const handleAddToCart = () => {
@@ -36,11 +44,17 @@ const ProductDetail = () => {
       navigate("/login", { state: { from: { pathname: location.pathname } } });
       toast.error("Please login to add to cart!");
       return;
-    } else {
-      if (product) {
+    }
+
+    if (product) {
+      if (cartItem) {
+        // When updating, add the new quantity to the existing quantity
+        const newQuantity = cartItem.quantity + quantity;
+        dispatch(updateQuantity({ id: product.id, quantity: newQuantity }));
+        toast.success("Cart updated!");
+      } else {
         dispatch(addToCart({ ...product, quantity }));
         toast.success("Added to cart!");
-        navigate("/cart");
       }
     }
   };
@@ -181,7 +195,7 @@ const ProductDetail = () => {
               disabled={!product.in_stock}
             >
               <ShoppingCart className="h-5 w-5 mr-2" />
-              {product.in_stock ? "Add to Cart" : "Out of Stock"}
+              {isInCart ? "Added to Cart" : "Add to Cart"}
             </button>
             <button
               onClick={handleWishlist}
