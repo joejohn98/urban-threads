@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Product } from "../types";
 
-interface FilterState {
+export interface FilterState {
   filterByCategory: string[];
   filterByRating: number | null;
   filterByPriceSort: "asc" | "desc" | "";
