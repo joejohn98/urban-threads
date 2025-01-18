@@ -176,7 +176,7 @@ const ProductDetail = () => {
               className={`flex-1 flex items-center justify-center px-6 py-3 rounded-md ${
                 product.in_stock
                   ? " bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
-                  : "border border-gray-300 text-gray-600 hover:bg-gray-100"
+                  : "border border-gray-300 text-gray-600 pointer-events-none"
               }`}
               disabled={!product.in_stock}
             >

@@ -16,7 +16,11 @@ const ProductCard: React.FC<ProductCardProps> = ({
   isInWishlist,
 }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col">
+    <div
+      className={`bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col ${
+        !product.in_stock ? "opacity-50 pointer-events-none" : ""
+      }`}
+    >
       <div className="relative pt-[100%]">
         <Link to={`/products/${product.id}`}>
           <img
