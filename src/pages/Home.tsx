@@ -4,7 +4,7 @@ import { ShoppingBag, Star, TrendingUp } from "lucide-react";
 import { useProducts } from "../hooks/useProducts";
 
 const Home = () => {
-  const { allProducts, isLoading, categories } = useProducts();
+  const { allProducts, isLoading, error, categories } = useProducts();
 
   const getFeaturedProducts = () => {
     return allProducts
@@ -59,6 +59,7 @@ const Home = () => {
               </div>
             </Link>
           ))}
+          {error && <p className="text-md text-red-500 mt-5">{error}</p>}
         </div>
       </section>
       {/* Featured Products Section */}
@@ -103,6 +104,7 @@ const Home = () => {
               </div>
             </Link>
           ))}
+          {error && <p className="text-md text-red-500 mt-5">{error}</p>}
         </div>
       </section>
     </div>
