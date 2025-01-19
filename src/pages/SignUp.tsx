@@ -4,10 +4,13 @@ import { useDispatch } from "react-redux";
 import { Eye, EyeOff, UserPlus } from "lucide-react";
 import { setUser } from "../store/slices/authSlice";
 import toast from "react-hot-toast";
+import { EMAIL_REGEX, NAME_REGEX, PASSWORD_REGEX } from "../utils/validation";
+import { AppDispatch } from "../store";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -17,34 +20,94 @@ const SignUp = () => {
     password: "",
     confirmPassword: "",
   });
+  const [errors, setErrors] = useState({
+    email: "",
+    firstName: "",
+    lastName: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // Form validation
+  const validateForm = () => {
+    const newErrors = {
+      email: "",
+      firstName: "",
+      lastName: "",
+      password: "",
+      confirmPassword: "",
+    };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+    // Email validation
+    if (!EMAIL_REGEX.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    // Name validation
+    if (!NAME_REGEX.test(formData.firstName)) {
+      newErrors.firstName =
+        "First name should be 2-30 characters, letters only";
+    }
+    if (!NAME_REGEX.test(formData.lastName)) {
+      newErrors.lastName = "Last name should be 2-30 characters, letters only";
+    }
+
+    // Password validation
+    if (!PASSWORD_REGEX.test(formData.password)) {
+      newErrors.password =
+        "Password must be at least 8 characters with 1 uppercase, 1 lowercase, and 1 number";
+    }
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    setErrors(newErrors);
+    return !Object.values(newErrors).some((error) => error !== "");
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    // Clear error when user starts typing
+    setErrors((prev) => ({
+      ...prev,
+      [name]: "",
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
       return;
     }
 
-   
-    dispatch(
-      setUser({
-        id: Date.now().toString(),
-        email: formData.email,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-      })
-    );
+    try {
+      setIsLoading(true);
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    toast.success("Account created successfully");
-    navigate("/");
+      dispatch(
+        setUser({
+          id: Date.now().toString(),
+          email: formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+        })
+      );
+
+      toast.success("Account created successfully");
+      navigate("/");
+    } catch (err: unknown) {
+      const error = err as Error;
+      toast.error(error.message || "Failed to create account");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -74,9 +137,15 @@ const SignUp = () => {
                 value={formData.firstName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                  errors.firstName ? "border-red-500" : "border-gray-300"
+                }`}
                 placeholder="John"
+                disabled={isLoading}
               />
+              {errors.firstName && (
+                <p className="mt-1 text-sm text-red-500">{errors.firstName}</p>
+              )}
             </div>
             <div>
               <label
@@ -92,9 +161,15 @@ const SignUp = () => {
                 value={formData.lastName}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                  errors.lastName ? "border-red-500" : "border-gray-300"
+                }`}
                 placeholder="Doe"
+                disabled={isLoading}
               />
+              {errors.lastName && (
+                <p className="mt-1 text-sm text-red-500">{errors.lastName}</p>
+              )}
             </div>
           </div>
 
@@ -112,9 +187,15 @@ const SignUp = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                errors.email ? "border-red-500" : "border-gray-300"
+              }`}
               placeholder="john.doe@example.com"
+              disabled={isLoading}
             />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+            )}
           </div>
 
           <div>
@@ -132,14 +213,17 @@ const SignUp = () => {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                minLength={6}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                  errors.password ? "border-red-500" : "border-gray-300"
+                }`}
                 placeholder="••••••••"
+                disabled={isLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                disabled={isLoading}
               >
                 {showPassword ? (
                   <EyeOff className="h-5 w-5" />
@@ -148,6 +232,9 @@ const SignUp = () => {
                 )}
               </button>
             </div>
+            {errors.password && (
+              <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+            )}
           </div>
 
           <div>
@@ -165,14 +252,17 @@ const SignUp = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
-                minLength={6}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                  errors.confirmPassword ? "border-red-500" : "border-gray-300"
+                }`}
                 placeholder="••••••••"
+                disabled={isLoading}
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-3 top-2.5 text-gray-400 hover:text-gray-600"
+                disabled={isLoading}
               >
                 {showConfirmPassword ? (
                   <EyeOff className="h-5 w-5" />
@@ -181,13 +271,19 @@ const SignUp = () => {
                 )}
               </button>
             </div>
+            {errors.confirmPassword && (
+              <p className="mt-1 text-sm text-red-500">
+                {errors.confirmPassword}
+              </p>
+            )}
           </div>
 
           <button
             type="submit"
-            className="w-full px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700"
+            className="w-full px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={isLoading}
           >
-            Create Account
+            {isLoading ? "Creating Account..." : "Create Account"}
           </button>
         </form>
 
