@@ -8,6 +8,7 @@ import { addToWishlist } from "../store/slices/wishlistSlice";
 import toast from "react-hot-toast";
 import { CartItem } from "../types";
 
+// Discount codes and their respective discount percentages
 const DISCOUNT_CODES = {
   SAVE10: 0.1,
   SAVE20: 0.2,
@@ -20,6 +21,7 @@ const Cart = () => {
   const [discountCode, setDiscountCode] = useState("");
   const [appliedDiscount, setAppliedDiscount] = useState(0);
 
+  // Handle quantity change for cart items
   const handleQuantityChange = (id: string, newQuantity: number) => {
     if (newQuantity > 0 && newQuantity <= 10) {
       dispatch(updateQuantity({ id, quantity: newQuantity }));
@@ -33,17 +35,20 @@ const Cart = () => {
     }
   };
 
+  // Handle removal of item from cart
   const handleRemove = (id: string) => {
     dispatch(removeFromCart(id));
     toast.success("Removed from cart");
   };
 
+  // Handle moving item to wishlist
   const handleMoveToWishlist = (item: CartItem) => {
     dispatch(addToWishlist(item));
     dispatch(removeFromCart(item.id));
     toast.success("Moved to wishlist");
   };
 
+  // Handle applying discount code
   const handleApplyDiscount = () => {
     const discount =
       DISCOUNT_CODES[discountCode as keyof typeof DISCOUNT_CODES];
@@ -55,8 +60,10 @@ const Cart = () => {
     }
   };
 
+  // Calculate total after discount
   const discountedTotal = total * (1 - appliedDiscount);
 
+  // Render empty cart message if no items in cart
   if (items.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] rounded-lg ">

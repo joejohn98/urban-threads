@@ -13,24 +13,31 @@ import toast from "react-hot-toast";
 import { useProducts } from "../hooks/useProducts";
 
 const ProductDetail = () => {
+  // Get the product ID from the URL parameters
   const { id } = useParams();
+  // Fetch all products and loading state using custom hook
   const { allProducts, isLoading } = useProducts();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
 
+  // Get user and cart items from the Redux store
   const { user } = useSelector((state: RootState) => state.auth);
   const { items } = useSelector((state: RootState) => state.cart);
 
+  // Get wishlist items from the Redux store
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
   const [quantity, setQuantity] = useState(1);
 
+  // Find the product based on the ID
   const product = allProducts.find((item) => item.id === id);
 
+  // Check if the product is in the wishlist or cart
   const isInWishlist = wishlistItems.some((item) => item.id === id);
   const cartItem = items.find((item) => item.id === id);
   const isInCart = Boolean(cartItem);
 
+  // Handle quantity change for the product
   const handleQuantityChange = (value: number) => {
     const newQuantity = Math.max(1, Math.min(10, value));
     setQuantity(newQuantity);
@@ -39,6 +46,7 @@ const ProductDetail = () => {
     }
   };
 
+  // Handle adding the product to the cart
   const handleAddToCart = () => {
     if (!user) {
       navigate("/login", { state: { from: { pathname: location.pathname } } });
@@ -59,6 +67,7 @@ const ProductDetail = () => {
     }
   };
 
+  // Handle adding/removing the product to/from the wishlist
   const handleWishlist = () => {
     if (!user) {
       navigate("/login", { state: { from: { pathname: location.pathname } } });
@@ -76,6 +85,7 @@ const ProductDetail = () => {
     }
   };
 
+  // Show loading spinner if products are still loading
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-96">
@@ -84,6 +94,7 @@ const ProductDetail = () => {
     );
   }
 
+  // Show message if product is not found
   if (!product) {
     return (
       <div className="text-center py-16">

@@ -29,7 +29,7 @@ const Checkout = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { items, total } = useSelector((state: RootState) => state.cart);
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(1); // Step state to track the current step in the checkout process
 
   const [shippingAddress, setShippingAddress] = useState<Address | null>(null);
 
@@ -37,20 +37,23 @@ const Checkout = () => {
     null
   );
 
+  // Handle submission of the shipping address form
   const handleAddressSubmit = (address: Address) => {
     setShippingAddress(address);
-    setStep(2);
+    setStep(2); // Move to the next step (Payment)
   };
 
+  // Handle submission of the payment form
   const handlePaymentSubmit = (payment: PaymentMethod) => {
     setPaymentMethod(payment);
-    setStep(3);
+    setStep(3); // Move to the next step (Review)
   };
 
+  // Handle placing the order
   const handlePlaceOrder = () => {
-    dispatch(clearCart());
-    toast.success("Order placed successfully!");
-    navigate("/order-confirmation");
+    dispatch(clearCart()); // Clear the cart
+    toast.success("Order placed successfully!"); // Show success message
+    navigate("/order-confirmation"); // Navigate to the order confirmation page
   };
 
   return (
@@ -101,8 +104,10 @@ const Checkout = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          {step === 1 && <AddressForm onSubmit={handleAddressSubmit} />}
-          {step === 2 && <PaymentForm onSubmit={handlePaymentSubmit} />}
+          {step === 1 && <AddressForm onSubmit={handleAddressSubmit} />}{" "}
+          {/* Render AddressForm if step is 1 */}
+          {step === 2 && <PaymentForm onSubmit={handlePaymentSubmit} />}{" "}
+          {/* Render PaymentForm if step is 2 */}
           {step === 3 && (
             <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
               <h2 className="text-2xl font-bold">Order Review</h2>
@@ -145,7 +150,8 @@ const Checkout = () => {
         </div>
 
         <div className="lg:col-span-1">
-          <OrderSummary items={items} total={total} />
+          <OrderSummary items={items} total={total} />{" "}
+          {/* Render OrderSummary */}
         </div>
       </div>
     </div>

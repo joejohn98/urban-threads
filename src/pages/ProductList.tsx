@@ -22,6 +22,7 @@ const ProductList = () => {
   const [searchParams] = useSearchParams();
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
+  // Fetch products, filters, categories, loading state, error, and pagination using custom hook
   const {
     products,
     filters,
@@ -32,8 +33,10 @@ const ProductList = () => {
     pagination,
   } = useProducts();
 
+  // Get wishlist items from the Redux store
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
 
+  // Update filters based on URL search parameters
   useEffect(() => {
     const category = searchParams.get("category");
     if (category) {
@@ -44,8 +47,7 @@ const ProductList = () => {
     }
   }, [searchParams]);
 
-  
-
+  // Handle adding a product to the cart
   const handleAddToCart = (product: Product) => {
     if (!user) {
       navigate("/login");
@@ -57,6 +59,7 @@ const ProductList = () => {
     }
   };
 
+  // Handle adding/removing a product to/from the wishlist
   const handleWishlist = (product: Product) => {
     if (!user) {
       navigate("/login");
@@ -73,6 +76,7 @@ const ProductList = () => {
     }
   };
 
+  // Handle clearing all filters
   const handleClearFilters = () => {
     setFilters({
       filterByPriceRange: [0, 1810],
@@ -83,6 +87,7 @@ const ProductList = () => {
     });
   };
 
+  // Show loading spinner if products are still loading
   if (isLoading) {
     return (
       <div className="flex justify-center items-center h-96">
@@ -91,6 +96,7 @@ const ProductList = () => {
     );
   }
 
+  // Show error message if there is an error
   if (error) {
     return (
       <div className="flex justify-center items-center h-96">
@@ -103,6 +109,7 @@ const ProductList = () => {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Our Products</h1>
 
+      {/* Mobile Filters Button */}
       <div className="lg:hidden mb-4">
         <button
           onClick={() => {

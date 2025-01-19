@@ -11,17 +11,20 @@ const Wishlist: React.FC = () => {
   const dispatch = useDispatch();
   const wishlistItems = useSelector((state: RootState) => state.wishlist.items);
 
+  // Handle removing an item from the wishlist
   const handleRemove = (id: string) => {
     dispatch(removeFromWishlist(id));
     toast.success("Removed from wishlist");
   };
 
+  // Handle moving an item from the wishlist to the cart
   const handleMoveToCart = (item: Product) => {
     dispatch(addToCart(item));
     dispatch(removeFromWishlist(item.id));
     toast.success("Moved to cart");
   };
 
+  // Render empty wishlist message if no items in wishlist
   if (wishlistItems.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] rounded-lg ">
