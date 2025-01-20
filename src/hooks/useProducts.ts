@@ -34,7 +34,7 @@ export const useProducts = () => {
         setIsLoading(false);
         setError(null);
       } catch (error) {
-        console.log("error", error);
+       
         setError("Failed to fetch products");
         setIsLoading(false);
       }

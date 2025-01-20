@@ -20,6 +20,7 @@ const emptyAddress: Address = {
 
 const AddressForm: React.FC<AddressFormProps> = ({ onSubmit }) => {
   const [formData, setFormData] = useState(emptyAddress);
+  const [error, setError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -38,14 +39,14 @@ const AddressForm: React.FC<AddressFormProps> = ({ onSubmit }) => {
       const randomAddress = await generateRandomAddress(); // Get random address
       setFormData({ ...randomAddress, id: Date.now().toString() }); // Update form data
     } catch (error) {
-      console.error("Error generating random address:", error);
+      setError("Failed to generate random address. Please try again.");
     }
   };
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
       <h2 className="text-2xl font-bold mb-6">Shipping Address</h2>
-
+      {error && <div className="mb-4 text-red-500">{error}</div>}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label
