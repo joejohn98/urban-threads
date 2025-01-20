@@ -39,7 +39,7 @@ const AddressForm: React.FC<AddressFormProps> = ({ onSubmit }) => {
       const randomAddress = await generateRandomAddress(); // Get random address
       setFormData({ ...randomAddress, id: Date.now().toString() }); // Update form data
       setError(null); // Clear error
-    } catch () {
+    } catch (error) {
       setError("Failed to generate random address. Please try again.");
     }
   };
