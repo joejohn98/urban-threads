@@ -1,50 +1,159 @@
-# React + TypeScript + Vite
+# Urban Threads 👕
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern e-commerce platform built with React, TypeScript, and Redux, offering a seamless shopping experience for fashion enthusiasts.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🛍️ Browse and search products
+- 🔐 User authentication
+- 🛒 Shopping cart management
+- ❤️ Wishlist functionality
+- 📱 Responsive design
+- 🌓 Modern UI with Tailwind CSS
+- 🔔 Toast notifications
+- 🔒 Protected routes
+- 🏪 Product categorization
+- 📊 Order summary and confirmation
+- 📝 Product reviews and ratings
+- 💰 Discount codes and promo codes
+- 📊 Product filtering and sorting
 
-## Expanding the ESLint configuration
+## 🏗️ Project Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```
+src/
+├── assets/           # Static assets and images
+├── components/       # Reusable UI components
+│   ├── auth/        # Authentication components
+│   └── layout/      # Layout components
+├── hooks/           # Custom React hooks
+├── pages/           # Application pages
+│   ├── Home
+│   ├── ProductList
+│   ├── ProductDetail
+│   ├── Cart
+│   ├── Wishlist
+│   ├── Checkout
+│   ├── Login
+│   └── SignUp
+├── store/           # Redux store configuration
+│   └── slices/      # Redux slices
+│       ├── authSlice
+│       ├── cartSlice
+│       └── wishlistSlice
+├── types/           # TypeScript type definitions
+└── utils/           # Utility functions
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## 🛠️ Technologies Used
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- React 18
+- TypeScript
+- Redux Toolkit
+- React Router DOM
+- React Hot Toast
+- Lucide React (Icons)
+- Tailwind CSS
+- Vite
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/joejohn98/urban-threads.git
+cd urban-threads
+```
+
+2. Install dependencies
+
+```bash
+npm install
+```
+
+### Development
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+### Production Build
+
+Create a production build:
+
+```bash
+npm run build
+```
+
+Preview the production build:
+
+```bash
+npm run preview
+```
+
+## 🧰 Component Details
+
+### Authentication
+
+- Protected routes for authenticated users
+- Login and signup functionality
+- User session management
+
+### Shopping Features
+
+- Product browsing and filtering
+- Shopping cart management
+- Wishlist functionality
+- Checkout process
+- Order confirmation
+
+### Layout Components
+
+- Responsive navigation bar
+- Footer with site information
+- Product cards and grids
+- Cart and wishlist indicators
+
+## 💾 State Management
+
+### Redux Store Structure
+
+- `auth`: User authentication state
+- `cart`: Shopping cart items and totals
+- `wishlist`: Saved items for later
+
+### Key Features
+
+- Persistent cart state
+- User authentication status
+- Wishlist management
+- Order processing
+
+## 💅 Styling
+
+- Tailwind CSS for responsive design
+- Custom CSS for specific components
+- Consistent theme across pages
+- Mobile-first approach
+
+## 🔧 Development Tools
+
+- ESLint for code linting
+- TypeScript for type safety
+- Vite for fast development
+- PostCSS for CSS processing
+
+Run linting:
+
+```bash
+npm run lint
 ```
