@@ -33,7 +33,7 @@ export const useProducts = () => {
         setProducts(data);
         setIsLoading(false);
         setError(null);
-      } catch (error) {
+      } catch {
         setError("Failed to fetch products");
         setIsLoading(false);
       }
