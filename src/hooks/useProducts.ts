@@ -64,9 +64,12 @@ export const useProducts = () => {
   const sortProducts = (a: Product, b: Product) => {
     const priceA = a.price;
     const priceB = b.price;
-    return filters.filterByPriceSort === "desc"
-      ? priceB - priceA
-      : priceA - priceB;
+    if (filters.filterByPriceSort === "") {
+      return 0;
+    }
+    return filters.filterByPriceSort === "asc"
+      ? priceA - priceB
+      : priceB - priceA;
   };
 
   const filteredProducts = products.filter(filterProducts).sort(sortProducts);
