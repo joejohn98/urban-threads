@@ -45,6 +45,15 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
     });
   };
 
+  const handleSizeChange = (size: string) => {
+    onFilterChange({
+      ...filters,
+      filterBySize: filters.filterBySize.includes(size)
+        ? filters.filterBySize.filter((item: string) => item !== size)
+        : [...filters.filterBySize, size],
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -90,6 +99,22 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
             />
             <span className="ml-2">High to Low</span>
           </label>
+        </div>
+      </div>
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Sizes</h3>
+        <div className="space-y-2">
+          {["S", "M", "L", "XL"].map((size) => (
+            <label key={size} className="flex items-center">
+              <input
+                type="checkbox"
+                checked={filters.filterBySize.includes(size)}
+                onChange={() => handleSizeChange(size)}
+                className="rounded text-indigo-600 focus:ring-indigo-500"
+              />
+              <span className="ml-2">{size}</span>
+            </label>
+          ))}
         </div>
       </div>
       <div>

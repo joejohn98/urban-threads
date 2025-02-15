@@ -44,27 +44,32 @@ export const useProducts = () => {
 
   const categories = [...new Set(products.map((product) => product.category))];
 
-  const filteredProducts = products
-    .filter((product) => {
-      const { price, category, rating, size } = product;
-      return (
-        price >= filters.filterByPriceRange[0] &&
-        price <= filters.filterByPriceRange[1] &&
-        (filters.filterByCategory.length === 0 ||
-          filters.filterByCategory.includes(category)) &&
-        (filters.filterByRating === null ||
-          parseFloat(rating) >= filters.filterByRating) &&
-        (filters.filterBySize.length === 0 ||
-          filters.filterBySize.includes(size))
-      );
-    })
-    .sort((a, b) => {
-      const priceA = a.price;
-      const priceB = b.price;
-      return filters.filterByPriceSort === "asc"
-        ? priceA - priceB
-        : priceB - priceA;
-    });
+  const filterProducts = (product: Product) => {
+    const { price, category, rating, size } = product;
+    const isInPriceRange =
+      price >= filters.filterByPriceRange[0] &&
+      price <= filters.filterByPriceRange[1];
+    const isInCategory =
+      filters.filterByCategory.length === 0 ||
+      filters.filterByCategory.includes(category);
+    const isInRating =
+      filters.filterByRating === null ||
+      parseFloat(rating) >= filters.filterByRating;
+    const isInSize =
+      filters.filterBySize.length === 0 || filters.filterBySize.includes(size);
+
+    return isInPriceRange && isInCategory && isInRating && isInSize;
+  };
+
+  const sortProducts = (a: Product, b: Product) => {
+    const priceA = a.price;
+    const priceB = b.price;
+    return filters.filterByPriceSort === "desc"
+      ? priceB - priceA
+      : priceA - priceB;
+  };
+
+  const filteredProducts = products.filter(filterProducts).sort(sortProducts);
 
   // Calculate pagination values
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
