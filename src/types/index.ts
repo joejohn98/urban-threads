@@ -41,5 +41,4 @@ export interface Address {
   country: string;
   zipCode: string;
   phone: string;
-  isDefault: boolean;
 }

@@ -15,7 +15,7 @@ const emptyAddress: Address = {
   country: "",
   zipCode: "",
   phone: "",
-  isDefault: false,
+ 
 };
 
 const AddressForm: React.FC<AddressFormProps> = ({ onSubmit }) => {

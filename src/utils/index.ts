@@ -66,6 +66,5 @@ export const generateRandomAddress = (): Omit<Address, "id"> => {
     zipCode: pinCodes[randomIndex],
     phone: phoneNumbers[randomIndex],
     country: "India",
-    isDefault: false,
-  };
-};
+  }
+}
