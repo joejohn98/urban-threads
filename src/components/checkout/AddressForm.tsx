@@ -179,26 +179,28 @@ const AddressForm: React.FC<AddressFormProps> = ({ onSubmit }) => {
           </div>
         </div>
 
-        <button
-          type="submit"
-          className="w-[250px] px-3 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700"
-        >
-          Continue to Payment
-        </button>
-        <button
-          type="button"
-          className="w-[250px] ml-3 px-3 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700"
-          onClick={handleRandomData}
-        >
-          Random Address
-        </button>
-        <button
-          type="button"
-          className="w-[180px] ml-3 px-3 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700"
-          onClick={() => setFormData(emptyAddress)}
-        >
-          Clear
-        </button>
+        <div className="flex justify-between mt-4">
+          <button
+            type="submit"
+            className="w-[250px] px-3 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700"
+          >
+            Continue to Payment
+          </button>
+          <button
+            type="button"
+            className="w-[250px] ml-3 px-3 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700"
+            onClick={handleRandomData}
+          >
+            Random Address
+          </button>
+          <button
+            type="button"
+            className="w-[180px] ml-3 px-3 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700"
+            onClick={() => setFormData(emptyAddress)}
+          >
+            Clear
+          </button>
+        </div>
       </form>
     </div>
   );
