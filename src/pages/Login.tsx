@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Eye, EyeOff, User } from "lucide-react";
 import { setUser } from "../store/slices/authSlice";
 import toast from "react-hot-toast";
 import { EMAIL_REGEX, MIN_PASSWORD_LENGTH } from "../utils/validation";
-import { AppDispatch } from "../store";
+import { AppDispatch, RootState } from "../store";
+import { User as UserType } from "../types";
 
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
+  const { users } = useSelector((state: RootState) => state.auth);
+
 
   // State management
   const [isLoading, setIsLoading] = useState(false);
@@ -72,6 +75,7 @@ const Login = () => {
           email: "guest@example.com",
           firstName: "Guest",
           lastName: "User",
+          password: "guest",
         })
       );
       toast.success("Logged in as guest");
@@ -96,24 +100,25 @@ const Login = () => {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      dispatch(
-        setUser({
-          id: "1",
-          email: formData.email,
-          firstName: "User",
-          lastName: "",
-        })
+      const user = users.find(
+        (u: UserType) =>
+          u.email === formData.email && u.password === formData.password
       );
+      if (user) {
+        dispatch(setUser(user));
 
-      // Store email in localStorage if remember me is checked
-      if (rememberMe) {
-        localStorage.setItem("rememberedEmail", formData.email);
+        // Store email in localStorage if remember me is checked
+        if (rememberMe) {
+          localStorage.setItem("rememberedEmail", formData.email);
+        } else {
+          localStorage.removeItem("rememberedEmail");
+        }
+
+        toast.success("Logged in successfully");
+        navigate(from, { replace: true });
       } else {
-        localStorage.removeItem("rememberedEmail");
+        toast.error("Login failed. Please check your email and password.");
       }
-
-      toast.success("Logged in successfully");
-      navigate(from, { replace: true });
     } catch {
       toast.error("Login failed. Please try again.");
     } finally {

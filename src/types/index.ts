@@ -22,12 +22,14 @@ export interface CartItem extends Product {
 export interface User {
   id: string;
   email: string;
+  password: string;
   firstName: string;
   lastName: string;
 }
 
 export interface AuthState {
   user: User | null;
+  users: User[];
   isLoading: boolean;
   error: string | null;
 }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Eye, EyeOff, UserPlus } from "lucide-react";
-import { setUser } from "../store/slices/authSlice";
+import { setUser, addUser } from "../store/slices/authSlice";
 import toast from "react-hot-toast";
 import { EMAIL_REGEX, NAME_REGEX, PASSWORD_REGEX } from "../utils/validation";
 import { AppDispatch } from "../store";
@@ -91,14 +91,16 @@ const SignUp = () => {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      dispatch(
-        setUser({
-          id: Date.now().toString(),
-          email: formData.email,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-        })
-      );
+      const newUser = {
+        id: Date.now().toString(),
+        email: formData.email,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        password: formData.password,
+      };
+
+      dispatch(addUser(newUser));
+      dispatch(setUser(newUser));
 
       toast.success("Account created successfully");
       navigate("/");
